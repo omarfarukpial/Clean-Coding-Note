@@ -238,13 +238,13 @@ Resource Link:  https://thixalongmy.haugiang.gov.vn/media/1175/clean_code.pdf
       - If it is more than three then try to pass all the argument inside as an object. 
       - Or break the function into separate function if it is possible.
 
-              If your method looks like this,
+        If your method looks like this,
 
                public void insertPersonData(String UUID, String name, String email, String phone, String address) {
                  // Logic to insert person data into database
                 }
 
-              Then change it to this,
+        Then change it to this,
         
               public void insertPersonData(Person person) {
                  // Logic to insert person data into database
@@ -252,10 +252,52 @@ Resource Link:  https://thixalongmy.haugiang.gov.vn/media/1175/clean_code.pdf
    - F2: Output Arguments
       - Generally arguments are expected to be used as input. Such as:
 
-              public addFooter(String footer) {
+              public void addFooter(String footer) {
                  // footer will be added to a document or report.
               }
 
-              In this example the argument footer is an input and it is going to add as a footer on a different file.
+        In this example the argument footer is an input and it is going to add as a footer on a different file.
       - But in some cases arguments can act as a output. Then the state should be changed. Example:
+
+              public void appendFooter(Report report) {
+                 // A new footer will be added to report document.
+              }
+
+        In this example the argument report is acting as an output file. A footer is going to be added inside the report document.
+        In this case, we can use something like this for clean code,
+    
+              Report report = new Report();
+              report.appendFooter();
+
+        The appendFooter method should be implemented in Report class.
+   - F3: Flag Arguments 
+      - If a function takes boolean arguments then it is doing more than one task. If the argument is `true` then one task and if `false` then another task.
+      - For this scenerio we need to separate that function in two.
+      - Example:
+
+              public void person(boolean isTeacher) {
+                 if(isTeacher) System.out.println("Lunch will be provided.");
+                 else System.out.println("Lunch will not be provided.");
+              }
         
+              public static void main() {
+                 person(true);
+              }
+
+        Indeed this is a bad practice. Inside the main() nobody will understand what the person(true) is doing.       
+        We should modify this code as,
+
+              public void personAsTeacher() {
+              System.out.println("Lunch will be provided.");
+              }
+        
+              public void personAsStudent() {
+              System.out.println("Lunch will not be provided.");
+              }
+        
+        Now we can call them separately.
+     - F4: Dead Function
+        - Functions that are no longer being used or called is known as dead function.
+        - Dead functions should be discarded.
+
+4. 
