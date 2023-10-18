@@ -196,3 +196,66 @@ Resource Link: https://www.oracle.com/java/technologies/javase/codeconventions-i
             
                          // ...implementation goes here...      }
           }
+
+
+
+## Clean Code (A Handbook of Agile Software Craftsmanship) - Chapter 17 - Smells and Heuristics
+Resource Link:  https://thixalongmy.haugiang.gov.vn/media/1175/clean_code.pdf
+
+1. Comments
+   - C1: Inappropriate Information
+      - Meta-data such as authors, lastmodified-date, SPR number, and so on should not appear in comments.
+      - If the inforamtion can be hold in different kinds of system such as source code control system, issue tracking system or any other record keeping system then it should not be in comment.
+      - Comments should be reserved for technical notes about the code and design.
+   - C2: Obsolete Comment
+      - Old, irrelevant and incorrect commnet should not be present.
+      - Such comment should be updated or removed.
+   - C3: Redundant Comment
+      - If the code describe itself then no need to write comment.
+        
+              i++; //increment i
+   - C4: Poorly Written Comment
+      - Choose words carefully.
+      - Grammar and punctuation needs to be accurate.
+   - C5: Commented-out code
+      - If a code portion is commented out. Then that code should be removed.
+      - Commented-out code's example
+
+              //for (int i = 0; i < n; i++) {
+              //   sum += i;
+              //}
+              // Remove this code portion...
+2. Environment
+   - E1: Build Requires More Than One Step
+      - The building process should not be complicated, just one simple command should do the work.
+      - Almost every environment has simple build cmd, if it is not there then we can create using bash script (.sh in Linux) or batch file (.bat or .cmd in Windows).
+   - E2: Tests Requires More Than One Step
+      - Test command should be also easy and simple.
+      - Most of the case IDEs provide the button to run all the test. But if it is not there, then a simple shell command should be created to run all the test at once.
+3. Functions
+   - F1: Too Many Arguments
+      - Function or method should not have more that three argument.
+      - If it is more than three then try to pass all the argument inside as an object. 
+      - Or break the function into separate function if it is possible.
+
+              If your method looks like this,
+
+               public void insertPersonData(String UUID, String name, String email, String phone, String address) {
+                 // Logic to insert person data into database
+                }
+
+              Then change it to this,
+        
+              public void insertPersonData(Person person) {
+                 // Logic to insert person data into database
+              }
+   - F2: Output Arguments
+      - Generally arguments are expected to be used as input. Such as:
+
+              public addFooter(String footer) {
+                 // footer will be added to a document or report.
+              }
+
+              In this example the argument footer is an input and it is going to add as a footer on a different file.
+      - But in some cases arguments can act as a output. Then the state should be changed. Example:
+        
