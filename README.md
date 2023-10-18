@@ -296,8 +296,25 @@ Resource Link:  https://thixalongmy.haugiang.gov.vn/media/1175/clean_code.pdf
               }
         
         Now we can call them separately.
-     - F4: Dead Function
+   - F4: Dead Function
         - Functions that are no longer being used or called is known as dead function.
         - Dead functions should be discarded.
 
-4. 
+4. General
+   - G1: Multiple Languages in One Source File
+      - A single file can contain multiple language. But the standard practice is one file should contain only one language.
+      - This README.md file supports Markdown and HTML both at the same time and it works fine. But I decide to use only Markdown for standard practice. 
+   - G2: Obvious Behavior Is Unimplemented
+      - What is obvious for a funtion, that should be implemented.
+      - Example:
+        Suppose I have a function that search by movie names,
+
+              public List<Movie> searchByTitle(String title) {
+              // Searching logic
+              }
+         
+        Here title matching should not be case sensitive. User can search movies in uppercase, lowercase or how ever he want. But our function should handle this.
+        And this is an Obvious behaviour that should be implemented.
+
+
+(Some more are upcomming...)
