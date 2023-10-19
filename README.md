@@ -315,6 +315,155 @@ Resource Link:  https://thixalongmy.haugiang.gov.vn/media/1175/clean_code.pdf
          
         Here title matching should not be case sensitive. User can search movies in uppercase, lowercase or how ever he want. But our function should handle this.
         And this is an Obvious behaviour that should be implemented.
+     - G3: Incorrect Behaviour at the Boundaries
+        - Boundary condition means basically the corner cases for a method or function.
+        - We have to be carefull about every possible corner cases and exceptions.
+        - Always write test cases that contains corner cases as much as possible.
+        - Example:
+      
+                public void oddEven(int number) {
+                   if (number % 2 == 1) System.out.println("Odd");
+                   else System.out.println("Even");
+                }
+           This code snippet seems works fine. Even for test cases like `10`, `3`, `0`;
+          But what about negative numbers? What if test case is like `-10`, `-3` ? Clearly this code won't show correct behaviour. We have to modify this code like,
+  
+                public void oddEven(int number) {
+                   if (number % 2 == 0) System.out.println("Even");
+                   else System.out.println("Odd");
+                }
+          Now this code behaves accurately.
+          
+     - G4: Overridden Safeties 
+         - Don't ever override any method that is related to safety, unless you are an expert.
+         - Turning off or ignoring the compiler warning is not a good thing either.
+     - G5: Duplication
+        - DRY (Don't repeate yourself).
+        - If any code repeates again and again then separate the code inside a method or probably another class can be implemented.
+        - In some cases like conditions `if-else` if the similar code repeats again and again then polymorphism can be applied.
+        - Template or Strategy pattern can be implemented also. 
+     - G6: Code at Wrong Level of Abstraction
+        - Base class is known as higher level and derived class is known as lower level.
+        - We have to choose the methods or variables smartly in higher level and lower level.
+        - Higher level should contains only the general implementations and lower level should contains detail implementations.
+        - Example (from book):
+      
+                public interface Stack {
+                   Object pop() throws EmptyException;
+                   void push(Object o) throws FullException;
+                   double percentFull();
+                }
+          This is a higher level implemetntation but the percentFull() method should not be present here. It shows a wrong level abstraction.
+          For example, if I use this Stack interface to keep books of a library then the percentFull() is needed,
+          but if I use this Stack to keep some digital items like serial number, then the percentFull() has no need there.
+          In simpler word percentFull() is sort of detail level implementation, so it should be in the lower level not in the heiger level.
+      - G7: Base Classes Depending on Their Derivatives
+         - Base class always should be independent.
+         - Base class should not know anything about derived classes.
+         - If it is needed to modify anything in the base class to make changes in derived class then it is a bad practice.
+      - G8: Too Much Information
+         - A class or interface should not have too much methods.
+         - If there is a scope to create a separate class then create it.
+      - G9: Dead Code
+         - Delete all the dead codes.
+         - If there is a statement inside the `if-else` or `try-catch` block that will never be executed, then that statement is known as a dead code.
+      - G10: Vertical Separation
+         - Variables and function should be defined close to where they are used.
+         - Local variables should be declared just above their first usage and should have a small vertical scope.
+         - Private functions should be defined just below their first usage. 
+      - G11: Inconsistency
+         - Always maintain the consistency of your coding style.
+         - It is better to follow the standard practice to be consistent.
+         - Variable or methods name can be consistent like, `getMovieByTitle()`, `getMovieByCategory()`.
+      - G12: Clutter
+         - Clutter means a file that is filled up with some unused code, unnecessary comments, or methods that is no longer in use.
+         - Keep your source files clean, well organized, and free of clutter.
+      - G13: Artificial Coupling
+         - If a variable, method (e.g. static) or constant use in general purpose, then these things should not be declared in a specific purposed class.
+         - Make sure that they are placed properly so that everyone can findout them easily.
+         - For constants we can simply create a class named **Constants** where every constants will be placed.
+      - G14: Feature Envy
+         - A method should not be interested in other class's methods or variables.
+         - But in some cases feature envy can be done.
+         - Examples (from book):
+
+                 public class HourlyPayCalculator {
+                  public Money calculateWeeklyPay(HourlyEmployee e) {
+                     int tenthRate = e.getTenthRate().getPennies();
+                     int tenthsWorked = e.getTenthsWorked();
+                     int straightTime = Math.min(400, tenthsWorked);
+                     int overTime = Math.max(0, tenthsWorked - straightTime);
+                     int straightPay = straightTime * tenthRate;
+                     int overtimePay = (int)Math.round(overTime*tenthRate*1.5);
+                     return new Money(straightPay + overtimePay);
+                   }
+                 }
+             Here,  `calculateWeeklyPay` is frequently reaching the `HourlyEmployee` class to access its variables and methods. This should not be done.
+           We can simply put the `calculateWeeklyPay` method inside the `HourlyEmployee` class.
+
+            But there are some cases, where **Feature Envy** is acceptable. Let's see the following code,
+
+           
+                 private HourlyEmployee employee ;
+                 public HourlyEmployeeReport(HourlyEmployee e) {
+                   this.employee = e;
+                 }
+                 String reportHours() {
+                   return String.format(
+                   "Name: %s\tHours:%d.%1d\n",
+                   employee.getName(),
+                   employee.getTenthsWorked()/10,
+                   employee.getTenthsWorked()%10);
+                 }
+
+           Here, the `reportHours()` should not be placed inside the `HourlyEmployee` class, that breaks the principles of OOP concepts.
+        
+           So, here **Feature Envy** is okay.
+
+        - G15: Selector Arguments
+           - If a method behaves differently based on its argument then it is a bad practice and the argument is known as **Selector Arguments**
+           - **Selector Arguments** can be `boolean`, `enums`, `Integer` or anything that controls the method's functionality.
+           - Example (Same as **Boolean Argument** section):
+
+                   public void person(boolean isTeacher) {
+                       if(isTeacher) System.out.println("Lunch will be provided.");
+                       else System.out.println("Lunch will not be provided.");
+                    }
+              
+                    public static void main() {
+                       person(true);
+                    }
+               In this example, `isTeacher` argument is controlling the `person` method's behaviour.
+             Hence there is a scope to split the method like,
+
+                 public void personAsTeacher() {
+                    System.out.println("Lunch will be provided.");
+                 }
+           
+                 public void personAsStudent() {
+                    System.out.println("Lunch will not be provided.");
+                 }
+        - G16: Obscured Intent
+           - A code should be expressive as possible. It should not be obscured.
+           - Example(from book):
+   
+                   public int m_otCalc() {
+                      return iThsWkd * iThsRte +
+                      (int) Math.round(0.5 * iThsRte * Math.max(0, iThsWkd - 400));
+                   }
+             This code is a perfect example of Obscure, nothing can be understandable form here.
+
+             We had to write this code like this,
+
+                   public int calculateOvertimePay() {
+                      int basePay = hoursWorked * hourlyRate;
+                      int overtimeHours = Math.max(0, hoursWorked - 400);
+                      int overtimePay = (int) Math.round(0.5 * hourlyRate * overtimeHours);
+                      int totalOvertimePay = basePay + overtimePay;
+                      return totalOvertimePay;
+                  }
 
 
-(Some more are upcomming...)
+
+             
+(To be continued...)
