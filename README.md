@@ -731,5 +731,25 @@ Resource Link:  https://thixalongmy.haugiang.gov.vn/media/1175/clean_code.pdf
 
 
          - G36: Avoid Transitive Navigation
-              
+            - Transitive Navigation means A module knows much about it's collaborators.
+            - Example(from book):
+
+                    a.getB().getC().doSomething();
+
+              Here, Module A knows it's collaborator B and C. That should not be happen.
+              Suppose if a new collaborator Q comes between B and C then it may need to convert like this,
+
+
+                     a.getB().getQ().getC().doSomething();
+
+              The architecture become rigid now.
+
+              It's always better to code like,
+
+                    myCollaborator.doSomething();
+
+
+   
+
+                            
 (To be continued...)
