@@ -642,5 +642,94 @@ Resource Link:  https://thixalongmy.haugiang.gov.vn/media/1175/clean_code.pdf
       - G32: Don't Be Arbitrary
          - Every structure should have a reason.
          - A consistent structure is an example of following the convention.
+      - G33: Encapsulate Boundary Conditions
+         - If there is a Boundary variable that is appearing multiple time then we should encapsulate that variable.
+         - Example:
+       
+           Look at this sample code,
 
+                 while(index + 1 < upcomingMovieList.length) {
+                    daysUntilMovieRelease(index + 1);
+                 }
+
+            Assume that the `daysUntilMovieRelease` calculates the remaining date for all the upcoming movies and update in the database.
+           Here, `index + 1` indicates the next upcoming movie item.
+
+           But in this code `index + 1` appears two time, hence we can easily encapsulate it like this,
+
+                 nextUpcomingMovieIndex = index + 1;
+                 while(nextUpcomingMovieIndex < upcomingMovieList.length) {
+                    daysUntilMovieRelease(nextUpcomingMovieIndex);
+                 }
+
+        - G34: Function Should Descend Only One Level of Abstraction
+           - The statements inside a method should be at the same level of abstraction.
+           - If there is a scope to separate or extract new method or class from this then it should be done.
+           - Example (from book):
+
+                   public String render() {
+                     StringBuffer html = new StringBuffer("<hr");
+                     if(size > 0)
+                      html.append(" size=\"").append(size + 1).append("\"");
+                     html.append(">");
+                     return html.toString();
+                   }
+
+             In this code there are lots of scope for abstraction.
+             Basically, the code is creating a new string for `hr` html tag.
+             But, a size attribute is present there.
+             if the `size = 5` then the output of this code will be like,
+
+                   <hr size = "6">
+
+             Here the size defines the height of the `hr` tag. 
+             But what we can do here,
+
+                   public String render() throws Exception {
+                      HtmlTag hr = new HtmlTag("hr");
+                      if (extraDashes > 0)
+                          hr.addAttribute("size", hrSize(extraDashes));
+                      return hr.html();
+                  }
+                  
+                  private String hrSize(int height) {
+                      int hrSize = height + 1;
+                      return String.format("%d", hrSize);
+                  }
+
+
+             Here the `HtmlTag` class handles all the syntax to create `hr` tag also the `hr.addAttribute` method is used to add attribute inside the `hr` tag.
+             `addAttribute` takes two arguments one is the attribute name and another is it's value.
+             Here the value of attribute is `hrSize(extraDashes)`. Here the value of size being calculated from `extraDashes` inside the `hrSize` method.
+
+             So, the abstractions are applied in two position here,
+             One is for constructing the `hr` tag, and another is for calculating the size of `hr`.
+
+         - G35: Keep Configurable Data at High Levels
+            - If the code have some configuration values (port number, database credintials, path etc) then place them in higher level.
+            - Example:
+          
+                 Suppose we have some default value. So we can put it in a class, 
+
+                     public class FitNesseConfig {
+                         public static final String DEFAULT_PATH = ".";
+                         public static final String DEFAULT_ROOT = "FitNesseRoot";
+                         public static final int DEFAULT_PORT = 80;
+                         public static final int DEFAULT_VERSION_DAYS = 14;
+                     }
+
+              Now, in the lower level we can use these,
+
+                     public static void main(String[] args) {
+                         Arguments arguments = parseCommandLine(args);
+                         int port = (arguments.port == 0) ? FitNesseConfig.DEFAULT_PORT : arguments.port;
+                     }
+
+              Here we are using `DEFAULT_PORT` variable instade of using `80` directly.
+              This approach help dramatically in the refactoring process. If we want to change anything in the configuration
+              or in the default value, then we just need to change only once. 
+
+
+         - G36: Avoid Transitive Navigation
+              
 (To be continued...)
