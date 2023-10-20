@@ -910,9 +910,31 @@ Resource Link:  https://thixalongmy.haugiang.gov.vn/media/1175/clean_code.pdf
       |--------|
       | start() |
       | stop() |
-     
+
+     Any kinds of modification regarding engine, now will be done inside the engine class.
 
 
+   - Symptoms of violating SRP
+      - Accidental Duplication
+           A class should only responsible to one actor.
+
+         | Employee | Actor |
+         |--------|----|
+         | calculatePay() | `CFO` |
+         | reportHours() | `COO` |
+         | save() | `CTO` |
+  
+        Here we can see this class violates the **SRP** because `calculatePay` is responsible to CFO, `reportHours` is responsible to COO and `save` is resonsible to CTO.
+        Now the problem arises when there is a common algorithm. Suppose `calculatePay` and `reportHours` depends on a different method named `regularHours`.
+        And if CFO decide to make some modification on `regularHours` method, then that will also directly affect the COO. But may be COO didn't want that code changes.
+        So, here we must separate these and avoid duplication.
+      
+      - Merges
+
+         If different actor want to modify on the same class then it may arise Merge conflict.
+        Let's assume CTO wants to change the `save` method, and at the same time COO wants to change the `reportHours` method and as they are in the same class,
+        then there is a high chance of getting merge conflict while merging.
+  
 
       
 
