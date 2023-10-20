@@ -880,5 +880,44 @@ Resource Link:  https://thixalongmy.haugiang.gov.vn/media/1175/clean_code.pdf
          - Pattern of failed test cases can also help us in debug.
          - Such as, we have wrote a program that add two integer, but when we are testing the result is like,
            `(3, 5) = 15`, `(2, 7) = 14` or `(5, 6) = 30`.
-           We can understand that we multiplied instead of summation. We need to check the equation again. 
+           We can understand that we multiplied instead of summation. We need to check the equation again.
+
+      - T8: Test Coverage Patterns Can Be Revealing
+         - Analysing the test coverage failures we can identify the bug.
+      - T9: Tests Should Be Fast
+         - Test case should run fast.
+         - Slow test often don't get run.
+       
+## SOLID Principles 
+
+1. SRP(Single Responsibility Principle)
+   - A module should have only one responsibility.
+   - More specifically a module should have only one reason to change.
+   - Example:
+
+      | Car |
+      |----------|
+      | setModel() |
+      | setColor() |
+      | setPrice() |
+      | startEngine() |
+      | stopEngine() |
+
+     But this class voilets the single responsibility principle, we should separate the engine portion into another class,
+
+
+      | Engine |
+      |--------|
+      | start() |
+      | stop() |
+     
+
+
+
+      
+
+
+
+
+
 (To be continued...)
