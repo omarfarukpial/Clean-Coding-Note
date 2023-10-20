@@ -750,6 +750,135 @@ Resource Link:  https://thixalongmy.haugiang.gov.vn/media/1175/clean_code.pdf
 
 
    
+   5. Java
+      - J1: Avoid Long Import Lists by Using Wildcards
+         - We can use wildcards to import packages
 
-                            
+                 import package.*;
+           Here, `*` means all the packages.
+           We can use
+
+                 import java.utils.*;
+           This line imports all the utility packages.
+
+      - J2: Don’t Inherit Constants
+         - Constants do not meant to be inherited.
+         - We can import static to import constants.
+       
+      - J3: Constants versus Enums
+         - Enums are very powerfull with it's built-in method or tools.
+         - Enums attach a name with it, so it can not get lost.
+         - Enums replaces `public static final` before the variable declaration.
+   6. Names
+      - N1: Choose Descriptive Names
+         - Variable's name should be descriptive and self explanatory.
+         - Descriptive names increases the readability and understandable.
+      - N2: Choose Names at the Appropriate Level of Abstraction
+         - For a variable inside higher level, names should be choosen carefully.
+         - Example(from book):
+
+                 public interface Modem {
+                   boolean dial(String phoneNumber);
+                   boolean disconnect();
+                   boolean send(char c);
+                   char recv();
+                   String getConnectedPhoneNumber();
+                  }
+
+           Here the `dial` takes `phoneNumber` string but, as a modern modem it can connect without phone number, it can connect with wire or port number.
+           So, instade of phone number we can use more generalize variable name here.
+
+                 
+                 public interface Modem {
+                   boolean dial(String connectionLocator);
+                   boolean disconnect();
+                   boolean send(char c);
+                   char recv();
+                   String getConnectedLocator();
+                  }
+
+           Here we write it as a connection locator. Although the previuos code would work fine, but we just make the name generalized.
+           Not limited to phone number only.
+
+
+      - N3: Use Standard Nomenclature Where Possible
+         - Java has some standard naming pattern, it's good to follow that.
+         - Example(from book): 
+
+              If you are using Decorator pattern in java, then `AutoHangupModemDecorator` can be used to decorate the `Modem` class.
+
+      - N4: Unambiguous Names
+         - Names should clearly say what it do.
+         - Example:
+
+                 public void rename() {
+                    for (episode : episodesList) {
+                        doRename(episode);
+                    }
+                 }
+
+            Here the `rename` or `doRename` doesn't clearly says what it do mainly.
+           But we can easily refactor these names like,
+
+
+                 public void renameAllEpisodes() {
+                    for (episode : episodesList) {
+                        renameEpisode(episode);
+                    }
+                 }
+
+      - N5: Use Long Names for Long Scopes
+         - Name of a variable should related with the name of the length of the scope.
+         - For small scope, we should think that if there is any need of large name?
+         - Such as,
+
+                 for (int i = 0; i < movie.length; i++) {
+                     //Some small 1 or 2 line simple logic
+                 }
+            Here, `i` is dennting the index, as the scope is small so we can keep `i` here, no need to replace it with a long name.
+
+      - N6: Avoid Encodings
+         - Name should not be encoded with types or scope.
+         - Previously some prefix like `m_` or `f` was handy but now it is useless.
+      - N7: Names Should Describe Side-Effects
+         - If a method do more than what it says in the name, then we need to modify that.
+         - Names should describe the method's job in single word.
+         - Example:
+
+                  public void updateMovie(Movie updatedMovie) {
+                     if (movieNotExistsById(updatedMovie.getId)) {
+                        //Create a new Movie then set all the element form updatedMovie
+                     } else {
+                        // Update the movie
+                     }
+                  }
+           This code not just updating movie, it first checks that if the movie exists or not by id,
+           if not exits then create and save it.
+           So the name should be like, `updateOrCreateMovie`
+
+   7. Tests
+      - T1: Insufficient Tests
+         - There is no standard definition of sufficient test.
+         - We should think about maximum corner cases.
+       
+      - T2: Use a Coverage Tool
+         - Coverage tools creates some marks indicating that how much a test has covered.
+         - It becomes handy to see if all the portion is tested or not.
+       
+      -  T3: Don’t Skip Trivial Tests
+         - We should not every skip tests even if they are easy or obvious.
+         - Keeping that test cases helps us in documentation and test coverage checking.
+       
+      - T4: An Ignored Test Is a Question about an Ambiguity
+         - A test that is commented out or annoted with `@Ignore` can lead ambiguity.
+         - We should get rid of these.
+      - T5: Test Boundary Conditions
+         - We should be more carefull about corner cases.
+      - T6: Exhaustively Test Near Bugs
+         - If we find a bug, we should run exhaustive test on that block. There is a high chance of finding multiple bug in that block.
+      - T7: Patterns of Failure Are Revealing
+         - Pattern of failed test cases can also help us in debug.
+         - Such as, we have wrote a program that add two integer, but when we are testing the result is like,
+           `(3, 5) = 15`, `(2, 7) = 14` or `(5, 6) = 30`.
+           We can understand that we multiplied instead of summation. We need to check the equation again. 
 (To be continued...)
