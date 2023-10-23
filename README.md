@@ -934,7 +934,75 @@ Resource Link:  https://thixalongmy.haugiang.gov.vn/media/1175/clean_code.pdf
          If different actor want to modify on the same class then it may arise Merge conflict.
         Let's assume CTO wants to change the `save` method, and at the same time COO wants to change the `reportHours` method and as they are in the same class,
         then there is a high chance of getting merge conflict while merging.
-  
+
+
+2. The Open Closed Principle (OCP)
+   - Open close means open for extension and closed for modification.
+   - A code block that is working fine we should not modify that unless it is mandatory. Modifying the existing code can lead us to create potential bugs.
+   - We should always be consious about the structure so that new feature can easily be implemented without modifying the code.
+   - For new functionality we can use interfaces and abstract class.
+   - Example:
+
+     Suppose we have a class that save the invoice as a file.
+
+         public class InvoicePersistence {
+             private Invoice invoice;
+         
+             public InvoicePersistence(Invoice invoice) {
+                 this.invoice = invoice;
+             }
+         
+             public void saveToFile(String filename) {
+                 // Creates a file with given name and writes the invoice
+             }
+         }
+
+     Now if we want to add a new feature to save the Invoice into database. So a easy way and also a bad practice is to write like this,
+
+           public class InvoicePersistence {
+             private Invoice invoice;
+         
+             public InvoicePersistence(Invoice invoice) {
+                 this.invoice = invoice;
+             }
+         
+             public void saveToFile(String filename) {
+                 // Creates a file with given name and writes the invoice
+             }
+         
+             public void saveToDatabase() {
+                 // Saves the invoice to database
+             }
+         }
+
+     We should not ever touch the existing code to add a new feature. We should create an interface insteade of this,
+
+            interface InvoicePersistence {
+                public void save(Invoice invoice);
+            }
+
+     Now to save as a file we can write this,
+
+           public class FilePersistence implements InvoicePersistence {
+                @Override
+                public void save(Invoice invoice) {
+                    // Save to file
+                }
+            }
+
+     And for save to database we can write like this,
+
+            public class DatabasePersistence implements InvoicePersistence {
+                @Override
+                public void save(Invoice invoice) {
+                    // Save to Database
+                }
+            }
+
+     In this way we can separate all file and database related code.
+
+     And, we can easily extend any features.
+     
 
       
 
